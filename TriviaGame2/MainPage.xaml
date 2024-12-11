@@ -7,6 +7,7 @@
     <StackLayout Padding="20" Spacing="15">
 
 
+        <Image Source="trivia_image.jpg" HeightRequest="185" Aspect="AspectFit" SemanticProperties.Description="To Do List image" />
 
 
         <!-- Navigate to Settings button -->

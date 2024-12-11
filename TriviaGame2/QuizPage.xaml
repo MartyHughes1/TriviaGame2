@@ -1,10 +1,8 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TriviaGame2.QuizPage"
              Title="QuizPage">
     <StackLayout Padding="20" Spacing="15">
-
 
         <!-- Display current question number -->
         <Label x:Name="QuestionNumberLabel" 
@@ -12,15 +10,14 @@
                FontSize="20"
                HorizontalTextAlignment="Center"
                VerticalTextAlignment="Center"/>
-        
-        
+
         <!-- Display the question -->
         <Label x:Name="QuestionLabel" 
-             Text="Question will appear here"
-             FontSize="24"
-             HorizontalTextAlignment="Center"
-             VerticalTextAlignment="Center"
-             LineBreakMode="WordWrap"/>
+               Text="Question will appear here"
+               FontSize="24"
+               HorizontalTextAlignment="Center"
+               VerticalTextAlignment="Center"
+               LineBreakMode="WordWrap"/>
 
         <!-- Display the answer options -->
         <StackLayout>
@@ -30,15 +27,13 @@
             <RadioButton GroupName="answers" Content="Answer 4" x:Name="Answer4"/>
         </StackLayout>
 
-
         <!-- Display current player's turn -->
         <Label x:Name="PlayerTurnLabel" 
                Text="Player 1's turn"
                FontSize="20"
                HorizontalTextAlignment="Center"
                VerticalTextAlignment="Center"/>
-        
-        
+
         <!-- Display the scores for each player -->
         <Label x:Name="PlayerScoresLabel"
                Text="Player 1: 0, Player 2: 0, Player 3: 0, Player 4: 0"
@@ -47,8 +42,19 @@
 
         <!-- Submit button -->
         <Button x:Name="SubmitButton" 
-              Text="Submit Answer"
-              Clicked="OnSubmitAnswerClicked" 
-              HorizontalOptions="Center"/>
+                Text="Submit Answer"
+                Clicked="OnSubmitAnswerClicked" 
+                HorizontalOptions="Center"/>
+
+        <Image x:Name="Trivia_image" Source="trivia_image.jpg" HeightRequest="185" Aspect="AspectFit" SemanticProperties.Description="To Do List image" IsVisible="False"/>
+
+
+        <!-- Play Again button (initially hidden) -->
+        <Button x:Name="PlayAgainButton" 
+                Text="Play Again"
+                Clicked="OnPlayAgainClicked"
+                HorizontalOptions="Center"
+                IsVisible="False"/>
+
     </StackLayout>
 </ContentPage>

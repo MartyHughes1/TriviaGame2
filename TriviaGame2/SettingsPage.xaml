@@ -5,6 +5,9 @@
              Title="SettingsPage">
     <VerticalStackLayout Padding="20" Spacing="15">
 
+        <Image Source="trivia_image.jpg" HeightRequest="185" Aspect="AspectFit" SemanticProperties.Description="To Do List image" />
+
+
         <!-- Picker to choose the number of players -->
         <Picker x:Name="PlayerPicker"
                 Title="Select Number of Players"

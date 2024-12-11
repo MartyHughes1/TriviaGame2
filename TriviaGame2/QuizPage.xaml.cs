@@ -1,9 +1,5 @@
-using Microsoft.Maui.Controls;
-using System.Data.Common;
-using System.Collections.ObjectModel;
+using System.Net;
 using System.Text.Json;
-using System.Diagnostics;
-using System.Net; // Add this using directive
 
 namespace TriviaGame2
 {
@@ -137,8 +133,24 @@ namespace TriviaGame2
             }
             else
             {
+                // Quiz Complete! Show final scores and the Play Again button
                 QuestionLabel.Text = "Quiz Complete!";
                 await DisplayAlert("Quiz Finished", $"Final Scores:\n{GetPlayerScoresString()}", "OK");
+
+                // Hide all other elements
+                QuestionNumberLabel.IsVisible = false;
+                PlayerTurnLabel.IsVisible = false;
+                QuestionLabel.IsVisible = false;
+                Answer1.IsVisible = false;
+                Answer2.IsVisible = false;
+                Answer3.IsVisible = false;
+                Answer4.IsVisible = false;
+                SubmitButton.IsVisible = false;
+                PlayerScoresLabel.IsVisible = false;
+
+                // Show the Play Again button and image
+                Trivia_image.IsVisible = true;
+                PlayAgainButton.IsVisible = true;
             }
         }
 
@@ -201,6 +213,38 @@ namespace TriviaGame2
             currentQuestionIndex++;
             currentPlayerIndex = (currentPlayerIndex + 1) % numberOfPlayers;
 
+            DisplayQuestion();
+        }
+
+        // Handle the "Play Again" button click event
+        private async void OnPlayAgainClicked(object sender, EventArgs e)
+        {
+            // Reset the state
+            currentQuestionIndex = 0;
+            currentPlayerIndex = 0;
+            playerScores = Enumerable.Repeat(0, numberOfPlayers).ToList();
+
+
+
+            // Hide the "Play Again" button and image
+            Trivia_image.IsVisible = false;
+            PlayAgainButton.IsVisible = false;
+
+            // Show the rest of the UI elements again
+            QuestionNumberLabel.IsVisible = true;
+            PlayerTurnLabel.IsVisible = true;
+            QuestionLabel.IsVisible = true;
+            Answer1.IsVisible = true;
+            Answer2.IsVisible = true;
+            Answer3.IsVisible = true;
+            Answer4.IsVisible = true;
+            SubmitButton.IsVisible = true;
+            PlayerScoresLabel.IsVisible = true;
+
+            // Update the scores label to show all players' scores as 0
+            UpdatePlayerScoresLabel();
+
+            // Restart the quiz
             DisplayQuestion();
         }
     }
