@@ -219,10 +219,8 @@ namespace TriviaGame2
         // Handle the "Play Again" button click event
         private async void OnPlayAgainClicked(object sender, EventArgs e)
         {
-            // Reset the state
-            currentQuestionIndex = 0;
-            currentPlayerIndex = 0;
-            playerScores = Enumerable.Repeat(0, numberOfPlayers).ToList();
+            // Navigate back to the mainpage to restart quiz
+            await Navigation.PopToRootAsync();
 
 
 
