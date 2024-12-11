@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TriviaGame2.QuizPage"
+             Title="QuizPage">
+    <StackLayout Padding="20" Spacing="15">
+
+
+        <!-- Display current question number -->
+        <Label x:Name="QuestionNumberLabel" 
+               Text="Question 1"
+               FontSize="20"
+               HorizontalTextAlignment="Center"
+               VerticalTextAlignment="Center"/>
+        
+        
+        <!-- Display the question -->
+        <Label x:Name="QuestionLabel" 
+             Text="Question will appear here"
+             FontSize="24"
+             HorizontalTextAlignment="Center"
+             VerticalTextAlignment="Center"
+             LineBreakMode="WordWrap"/>
+
+        <!-- Display the answer options -->
+        <StackLayout>
+            <RadioButton GroupName="answers" Content="Answer 1" x:Name="Answer1"/>
+            <RadioButton GroupName="answers" Content="Answer 2" x:Name="Answer2"/>
+            <RadioButton GroupName="answers" Content="Answer 3" x:Name="Answer3"/>
+            <RadioButton GroupName="answers" Content="Answer 4" x:Name="Answer4"/>
+        </StackLayout>
+
+
+        <!-- Display current player's turn -->
+        <Label x:Name="PlayerTurnLabel" 
+               Text="Player 1's turn"
+               FontSize="20"
+               HorizontalTextAlignment="Center"
+               VerticalTextAlignment="Center"/>
+        
+        
+        <!-- Display the scores for each player -->
+        <Label x:Name="PlayerScoresLabel"
+               Text="Player 1: 0, Player 2: 0, Player 3: 0, Player 4: 0"
+               FontSize="18"
+               HorizontalTextAlignment="Center"/>
+
+        <!-- Submit button -->
+        <Button x:Name="SubmitButton" 
+              Text="Submit Answer"
+              Clicked="OnSubmitAnswerClicked" 
+              HorizontalOptions="Center"/>
+    </StackLayout>
+</ContentPage>

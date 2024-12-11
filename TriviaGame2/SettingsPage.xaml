@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TriviaGame2.SettingsPage"
+             Title="SettingsPage">
+    <VerticalStackLayout Padding="20" Spacing="15">
+
+        <!-- Picker to choose the number of players -->
+        <Picker x:Name="PlayerPicker"
+                Title="Select Number of Players"
+                SelectedIndex="0"  
+            VerticalOptions="Center"
+                HorizontalOptions="Center">
+            <Picker.Items>
+                <x:String>1</x:String>
+                <x:String>2</x:String>
+                <x:String>3</x:String>
+                <x:String>4</x:String>
+            </Picker.Items>
+        </Picker>
+
+        <!-- Picker to choose the trivia category -->
+        <Picker x:Name="CategoryPicker"
+                Title="Select Category"
+                SelectedIndex="0"
+                VerticalOptions="Center"
+                HorizontalOptions="Center">
+            <Picker.Items>
+                <x:String>General Knowledge</x:String>
+                <x:String>Science and Nature</x:String>
+                <x:String>Entertainment: Video Games</x:String>
+                <x:String>Entertainment: Film</x:String>
+                <x:String>Music</x:String>
+                <x:String>Books</x:String>
+                <x:String>Art</x:String>
+                
+            </Picker.Items>
+        </Picker>
+
+        <!-- Picker to choose the number of questions per player -->
+        <Picker x:Name="QuestionsPicker"
+                Title="Select Number of Questions per Player"
+                SelectedIndex="0"
+                VerticalOptions="Center"
+                HorizontalOptions="Center">
+            <Picker.Items>
+                <x:String>5</x:String>
+                <x:String>10</x:String>
+                <x:String>15</x:String>
+                <x:String>20</x:String>
+            </Picker.Items>
+        </Picker>
+
+        <!-- Go to Quiz button -->
+        <Button x:Name="StartQuizButton" 
+                Text="Start Quiz"
+                Clicked="OnStartQuizButtonClicked"
+                HorizontalOptions="Center"/>
+    </VerticalStackLayout>
+</ContentPage>
