@@ -1,3 +1,10 @@
+using Microsoft.Maui.Controls;
+using System.Data.Common;
+using System.Collections.ObjectModel;
+using System.Text.Json;
+using System.Diagnostics;
+using System.Net; 
+
 using System.Net;
 using System.Text.Json;
 
@@ -10,16 +17,19 @@ namespace TriviaGame2
         private int currentQuestionIndex = 0;
         private int currentPlayerIndex = 0;
         private List<int> playerScores = new();
+        private List<string> playerNames = new(); //List to hold player names
         private int numberOfPlayers;
         private string category;
         private int questionsPerPlayer;
 
-        public QuizPage(int numberOfPlayers, string category, int questionsPerPlayer)
+        // Updated constructor to accept player names
+        public QuizPage(int numberOfPlayers, string category, int questionsPerPlayer, List<string> playerNames)
         {
             InitializeComponent();
             this.numberOfPlayers = numberOfPlayers;
             this.category = category;
             this.questionsPerPlayer = questionsPerPlayer;
+            this.playerNames = playerNames;
 
             // Initialize player scores (set all to 0 initially)
             playerScores = Enumerable.Repeat(0, numberOfPlayers).ToList();
@@ -103,7 +113,7 @@ namespace TriviaGame2
                 QuestionNumberLabel.Text = $"Question {currentQuestionIndex + 1}";
 
                 // Update the Player Turn Label
-                PlayerTurnLabel.Text = $"Player {currentPlayerIndex + 1}'s turn";
+                PlayerTurnLabel.Text = $"{playerNames[currentPlayerIndex]}'s turn";
 
                 QuestionLabel.Text = DecodeHtml(currentQuestion.Question);
 
@@ -151,6 +161,9 @@ namespace TriviaGame2
                 // Show the Play Again button and image
                 Trivia_image.IsVisible = true;
                 PlayAgainButton.IsVisible = true;
+                LeaderboardList.IsVisible = true;
+                LeaderboardList2.IsVisible = true;
+
             }
         }
 
@@ -159,7 +172,7 @@ namespace TriviaGame2
             var scoresString = "";
             for (int i = 0; i < playerScores.Count; i++)
             {
-                scoresString += $"Player {i + 1}: {playerScores[i]}\n";
+                scoresString += $"{playerNames[i]}: {playerScores[i]}\n";
             }
             return scoresString;
         }
@@ -170,7 +183,7 @@ namespace TriviaGame2
             var scoresString = "";
             for (int i = 0; i < playerScores.Count; i++)
             {
-                scoresString += $"Player {i + 1}: {playerScores[i]}, ";
+                scoresString += $"{playerNames[i]}: {playerScores[i]}, ";
             }
 
             // Remove the last comma and space
@@ -222,11 +235,12 @@ namespace TriviaGame2
             // Navigate back to the mainpage to restart quiz
             await Navigation.PopToRootAsync();
 
-
-
             // Hide the "Play Again" button and image
             Trivia_image.IsVisible = false;
             PlayAgainButton.IsVisible = false;
+            LeaderboardList.IsVisible = false;
+            LeaderboardList2.IsVisible = false;
+
 
             // Show the rest of the UI elements again
             QuestionNumberLabel.IsVisible = true;

@@ -1,18 +1,18 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TriviaGame2.SettingsPage"
              Title="SettingsPage">
+
+    <ScrollView>
     <VerticalStackLayout Padding="20" Spacing="15">
 
         <Image Source="trivia_image.jpg" HeightRequest="185" Aspect="AspectFit" SemanticProperties.Description="To Do List image" />
-
 
         <!-- Picker to choose the number of players -->
         <Picker x:Name="PlayerPicker"
                 Title="Select Number of Players"
                 SelectedIndex="0"  
-            VerticalOptions="Center"
+                VerticalOptions="Center"
                 HorizontalOptions="Center">
             <Picker.Items>
                 <x:String>1</x:String>
@@ -21,6 +21,13 @@
                 <x:String>4</x:String>
             </Picker.Items>
         </Picker>
+
+        <!-- Player Names Entries (will be shown based on the number of players selected) -->
+        <Label Text="Enter Player Names:" FontSize="Medium" HorizontalOptions="Center"/>
+
+        <StackLayout x:Name="PlayerNameStackLayout" Spacing="10">
+            <!-- Dynamically generated Entry fields for player names -->
+        </StackLayout>
 
         <!-- Picker to choose the trivia category -->
         <Picker x:Name="CategoryPicker"
@@ -36,7 +43,6 @@
                 <x:String>Music</x:String>
                 <x:String>Books</x:String>
                 <x:String>Art</x:String>
-                
             </Picker.Items>
         </Picker>
 
@@ -60,4 +66,5 @@
                 Clicked="OnStartQuizButtonClicked"
                 HorizontalOptions="Center"/>
     </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

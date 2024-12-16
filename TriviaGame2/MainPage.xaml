@@ -5,10 +5,7 @@
              Title="Trivia Game">
 
     <StackLayout Padding="20" Spacing="15">
-
-
-        <Image Source="trivia_image.jpg" HeightRequest="185" Aspect="AspectFit" SemanticProperties.Description="To Do List image" />
-
+        <Image Source="trivia_image.jpg" HeightRequest="185" Aspect="AspectFit" SemanticProperties.Description="Trivia image" />
 
         <!-- Navigate to Settings button -->
         <Button x:Name="SettingsButton" 
@@ -16,9 +13,9 @@
                 Clicked="OnSettingsButtonClicked"
                 HorizontalOptions="Center"/>
 
+        <!-- Leaderboard Section -->
+        <Label Text="Leaderboard" FontSize="24" HorizontalOptions="Center" Margin="0,20"/>
 
 
     </StackLayout>
-
-
 </ContentPage>

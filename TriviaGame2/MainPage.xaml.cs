@@ -9,12 +9,13 @@ namespace TriviaGame2
 {
     public partial class MainPage : ContentPage
     {
+        
 
 
         public MainPage()
         {
             InitializeComponent();
-
+            
 
 
         }
@@ -28,5 +29,8 @@ namespace TriviaGame2
             await Navigation.PushAsync(new SettingsPage());
         }
     }
+
+
+
 
 }

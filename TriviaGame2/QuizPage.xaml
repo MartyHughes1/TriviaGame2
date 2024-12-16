@@ -2,6 +2,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TriviaGame2.QuizPage"
              Title="QuizPage">
+
+    <ScrollView>
     <StackLayout Padding="20" Spacing="15">
 
         <!-- Display current question number -->
@@ -55,6 +57,66 @@
                 Clicked="OnPlayAgainClicked"
                 HorizontalOptions="Center"
                 IsVisible="False"/>
+        
+        
+        <!-- Leaderboard List, which will be hidden until the game is complete-->
+            <VerticalStackLayout x:Name="LeaderboardList" HorizontalOptions="Center" IsVisible="False">
+            <HorizontalStackLayout Spacing="50" HorizontalOptions="Center">
+                <Border Stroke="DarkRed" HeightRequest="44" WidthRequest="500" StrokeThickness="4"
+                            HorizontalOptions="Center" VerticalOptions="Center">
+                    <Label Text="Name:" Style="{StaticResource SubHeadline}"
+                               SemanticProperties.HeadingLevel="Level2" />
+                </Border>
+
+                <Border Stroke="DarkRed" HeightRequest="44" WidthRequest="500" StrokeThickness="4" 
+                            HorizontalOptions="Center" VerticalOptions="Center">
+                    <Label Text="Score:" Style="{StaticResource SubHeadline}" 
+                               SemanticProperties.HeadingLevel="Level2" />
+                </Border>
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+
+
+            <HorizontalStackLayout x:Name="LeaderboardList2" Spacing="50" HorizontalOptions="Center" IsVisible="False">
+            <Border Stroke="DarkRed" StrokeThickness="4" MinimumWidthRequest="500" MinimumHeightRequest="200" 
+                        HorizontalOptions="Center">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10" />
+                </Border.StrokeShape>
+                <ListView ItemsSource="{Binding MyItems}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <HorizontalStackLayout>
+                                    <Label Text="{Binding Items}" VerticalOptions="Center" />
+                                    
+                                </HorizontalStackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Border>
+
+            <Border Stroke="DarkRed" StrokeThickness="4" Padding="10" MinimumWidthRequest="500"
+                        MinimumHeightRequest="200" HorizontalOptions="Center">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10" />
+                </Border.StrokeShape>
+                <ListView ItemsSource="{Binding MyItems2}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <HorizontalStackLayout>
+                                    <Label Text="{Binding Items}" VerticalOptions="Center" />
+                                    
+                                </HorizontalStackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Border>
+        </HorizontalStackLayout>
 
     </StackLayout>
+    </ScrollView>
 </ContentPage>
