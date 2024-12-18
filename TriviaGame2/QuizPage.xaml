@@ -11,7 +11,7 @@
                Text="Question 1"
                FontSize="20"
                HorizontalTextAlignment="Center"
-               VerticalTextAlignment="Center"/>
+               VerticalTextAlignment="Center" IsVisible="False"/>
 
         <!-- Display the question -->
         <Label x:Name="QuestionLabel" 
@@ -19,14 +19,15 @@
                FontSize="24"
                HorizontalTextAlignment="Center"
                VerticalTextAlignment="Center"
-               LineBreakMode="WordWrap"/>
+               LineBreakMode="WordWrap"
+               IsVisible="False"/>
 
         <!-- Display the answer options -->
-        <StackLayout>
-            <RadioButton GroupName="answers" Content="Answer 1" x:Name="Answer1"/>
-            <RadioButton GroupName="answers" Content="Answer 2" x:Name="Answer2"/>
-            <RadioButton GroupName="answers" Content="Answer 3" x:Name="Answer3"/>
-            <RadioButton GroupName="answers" Content="Answer 4" x:Name="Answer4"/>
+            <StackLayout>
+                <RadioButton GroupName="answers" Content="Answer 1" x:Name="Answer1"  IsVisible="False"/>
+                <RadioButton GroupName="answers" Content="Answer 2" x:Name="Answer2"  IsVisible="False"/>
+                <RadioButton GroupName="answers" Content="Answer 3" x:Name="Answer3"  IsVisible="False"/>
+                <RadioButton GroupName="answers" Content="Answer 4" x:Name="Answer4"  IsVisible="False"/>
         </StackLayout>
 
         <!-- Display current player's turn -->
@@ -34,19 +35,22 @@
                Text="Player 1's turn"
                FontSize="20"
                HorizontalTextAlignment="Center"
-               VerticalTextAlignment="Center"/>
+               VerticalTextAlignment="Center"
+               IsVisible="False"/>
 
         <!-- Display the scores for each player -->
         <Label x:Name="PlayerScoresLabel"
                Text="Player 1: 0, Player 2: 0, Player 3: 0, Player 4: 0"
                FontSize="18"
-               HorizontalTextAlignment="Center"/>
+               HorizontalTextAlignment="Center"
+               IsVisible="False"/>
 
         <!-- Submit button -->
         <Button x:Name="SubmitButton" 
                 Text="Submit Answer"
                 Clicked="OnSubmitAnswerClicked" 
-                HorizontalOptions="Center"/>
+                HorizontalOptions="Center"
+                IsVisible="False"/>
 
         <Image x:Name="Trivia_image" Source="trivia_image.jpg" HeightRequest="185" Aspect="AspectFit" SemanticProperties.Description="To Do List image" IsVisible="False"/>
 
@@ -59,19 +63,12 @@
                 IsVisible="False"/>
 
 
-            <VerticalStackLayout HorizontalOptions="Center">
 
-                <HorizontalStackLayout Spacing="25" HorizontalOptions="Center">
-                    <Button x:Name="ClearListBtn" Text="Clear Leaderboard" Clicked="ClearLeaderboard"
-                        MinimumWidthRequest="500" HorizontalOptions="Center" BackgroundColor="DarkRed" IsVisible="False"/>
-                </HorizontalStackLayout>
-
-            </VerticalStackLayout>
 
 
             <!-- Leaderboard List, which will be hidden until the game is complete-->
-            <VerticalStackLayout x:Name="LeaderboardList" HorizontalOptions="Center" IsVisible="False">
-                <Label Text="Leaderboard" FontSize="24" HorizontalOptions="Center" Margin="0,20"/>
+            <VerticalStackLayout x:Name="LeaderboardList" HorizontalOptions="Center" IsVisible="True">
+                <Label Text="The Current Leaderboard" FontSize="24" HorizontalOptions="Center" Margin="0,20"/>
                 <HorizontalStackLayout Spacing="50" HorizontalOptions="Center">
                 <Border Stroke="DarkRed" HeightRequest="44" WidthRequest="500" StrokeThickness="4"
                             HorizontalOptions="Center" VerticalOptions="Center">
@@ -88,7 +85,7 @@
         </VerticalStackLayout>
 
 
-            <HorizontalStackLayout x:Name="LeaderboardList2" Spacing="50" HorizontalOptions="Center" IsVisible="False" >
+            <HorizontalStackLayout x:Name="LeaderboardList2" Spacing="50" HorizontalOptions="Center" IsVisible="True" >
             <Border Stroke="DarkRed" StrokeThickness="4" MinimumWidthRequest="500" MinimumHeightRequest="200" 
                         HorizontalOptions="Center" Padding="10" >
                 <Border.StrokeShape>
@@ -126,8 +123,30 @@
                     </ListView.ItemTemplate>
                 </ListView>
             </Border>
-        </HorizontalStackLayout>
 
-    </StackLayout>
+
+            </HorizontalStackLayout>
+
+
+            <VerticalStackLayout HorizontalOptions="Center">
+
+                <HorizontalStackLayout Spacing="25" HorizontalOptions="Center">
+                    <Button x:Name="ClearListBtn" Text="Clear Leaderboard" Clicked="ClearLeaderboard"
+                        MinimumWidthRequest="500" HorizontalOptions="Center" BackgroundColor="DarkRed" IsVisible="True"/>
+                </HorizontalStackLayout>
+
+            </VerticalStackLayout>
+
+            <VerticalStackLayout HorizontalOptions="Center">
+            <!-- Begin quiz button -->
+            <Button x:Name="StartButton" 
+                Text="Begin Quiz"
+                Clicked="OnStartClicked"
+                HorizontalOptions="Center"
+                IsVisible="True"/>
+
+            </VerticalStackLayout>
+
+        </StackLayout>
     </ScrollView>
 </ContentPage>

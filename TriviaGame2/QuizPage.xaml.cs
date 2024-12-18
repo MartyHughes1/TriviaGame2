@@ -45,10 +45,9 @@ namespace TriviaGame2
             // Initialize the PlayerScoresLabel to show the initial scores
             UpdatePlayerScoresLabel();
 
-            // Calculate total questions needed (number of players * questions per player)
-            int totalQuestions = numberOfPlayers * questionsPerPlayer;
 
-            FetchTriviaQuestions(totalQuestions);
+
+            
 
             // Load saved player names from preferences when the app starts
             List<MyItem> loadedNames = LoadNamesFromPreferences();
@@ -69,6 +68,33 @@ namespace TriviaGame2
             {
                 MyItems2.Add(item);
             }
+        }
+
+        private async void OnStartClicked(object sender, EventArgs e)
+        {
+
+            // Hide these after start
+            LeaderboardList.IsVisible = false;
+            LeaderboardList2.IsVisible = false;
+            ClearListBtn.IsVisible = false;
+            StartButton.IsVisible = false;
+
+
+            // Show the rest of the UI elements again
+            QuestionNumberLabel.IsVisible = true;
+            PlayerTurnLabel.IsVisible = true;
+            QuestionLabel.IsVisible = true;
+            Answer1.IsVisible = true;
+            Answer2.IsVisible = true;
+            Answer3.IsVisible = true;
+            Answer4.IsVisible = true;
+            SubmitButton.IsVisible = true;
+            PlayerScoresLabel.IsVisible = true;
+
+
+            // Calculate total questions needed (number of players * questions per player)
+            int totalQuestions = numberOfPlayers * questionsPerPlayer;
+            FetchTriviaQuestions(totalQuestions);
         }
 
 
@@ -191,28 +217,22 @@ namespace TriviaGame2
                 // Show these after quiz
                 Trivia_image.IsVisible = true;
                 PlayAgainButton.IsVisible = true;
-                LeaderboardList.IsVisible = true;
-                LeaderboardList2.IsVisible = true;
-                ClearListBtn.IsVisible = true;
 
-                // To add player names to list
-                for (int i = 0; i < playerScores.Count; i++)
-                {
-                    var myItem = new MyItem
+                // Combine player names and scores into a list of PlayerScore objects
+                List<PlayerScore> playerScoresList = playerNames
+                    .Select((name, index) => new PlayerScore
                     {
-                        Items = $"{playerNames[i]}"
-                    };
-                    MyItems.Add(myItem);
-                }
+                        PlayerName = name,
+                        Score = playerScores[index]
+                    })
+                    .OrderByDescending(ps => ps.Score) // Sort by score in descending order
+                    .ToList();
 
-                // To add player scores to list
-                for (int i = 0; i < playerScores.Count; i++)
+                // Update MyItems and MyItems2 with sorted player names and scores
+                foreach (var playerScore in playerScoresList)
                 {
-                    var myItem = new MyItem
-                    {
-                        Items = $"{playerScores[i]}"
-                    };
-                    MyItems2.Add(myItem);
+                    MyItems.Add(new MyItem { Items = playerScore.PlayerName });
+                    MyItems2.Add(new MyItem { Items = playerScore.Score.ToString() });
                 }
 
                 // Save tasks after adding a new one (include both MyItems and MyItems2)
@@ -220,6 +240,7 @@ namespace TriviaGame2
                 SaveScoresToPreferences(MyItems2.ToList());
             }
         }
+
 
         private string GetPlayerScoresString()
         {
@@ -326,9 +347,17 @@ namespace TriviaGame2
         // Method to save player names to preferences
         private void SaveNamesToPreferences(List<MyItem> NamesPlayer)
         {
-            string json = JsonSerializer.Serialize(NamesPlayer);
-            Preferences.Set("PlayerNames", json); // Save player names separately
+            string json = JsonSerializer.Serialize(NamesPlayer.OrderBy(x => x.Items).ToList());
+            Preferences.Set("PlayerNames", json); // Save player names in order if necessary
         }
+
+        // Method to save player scores to preferences
+        private void SaveScoresToPreferences(List<MyItem> Playerscores)
+        {
+            string json = JsonSerializer.Serialize(Playerscores.OrderByDescending(x => int.TryParse(x.Items, out var score) ? score : 0).ToList());
+            Preferences.Set("PlayerScores", json); // Save player scores in descending order
+        }
+
 
         // Method to load player names from preferences
         private List<MyItem> LoadNamesFromPreferences()
@@ -336,17 +365,13 @@ namespace TriviaGame2
             string json = Preferences.Get("PlayerNames", "");
             if (!string.IsNullOrEmpty(json))
             {
-                return JsonSerializer.Deserialize<List<MyItem>>(json);
+                var names = JsonSerializer.Deserialize<List<MyItem>>(json);
+                return names.OrderBy(x => x.Items).ToList(); // Order the names list if necessary
             }
             return new List<MyItem>(); // Return empty list if no names exist
         }
 
-        // Method to save player scores to preferences
-        private void SaveScoresToPreferences(List<MyItem> Playerscores)
-        {
-            string json = JsonSerializer.Serialize(Playerscores);
-            Preferences.Set("PlayerScores", json); // Save player scores separately
-        }
+
 
         // Method to load player scores from preferences
         private List<MyItem> LoadScoresFromPreferences()
@@ -354,7 +379,9 @@ namespace TriviaGame2
             string json = Preferences.Get("PlayerScores", "");
             if (!string.IsNullOrEmpty(json))
             {
-                return JsonSerializer.Deserialize<List<MyItem>>(json);
+                var scores = JsonSerializer.Deserialize<List<MyItem>>(json);
+                // Order the scores in descending order based on the scores
+                return scores.OrderByDescending(x => int.TryParse(x.Items, out var score) ? score : 0).ToList();
             }
             return new List<MyItem>(); // Return empty list if no scores exist
         }
@@ -371,6 +398,13 @@ namespace TriviaGame2
             SaveScoresToPreferences(MyItems2.ToList());
 
         }
+
+        public class PlayerScore
+        {
+            public string PlayerName { get; set; }
+            public int Score { get; set; }
+        }
+
 
 
 
