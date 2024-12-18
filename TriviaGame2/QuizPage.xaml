@@ -57,11 +57,22 @@
                 Clicked="OnPlayAgainClicked"
                 HorizontalOptions="Center"
                 IsVisible="False"/>
-        
-        
-        <!-- Leaderboard List, which will be hidden until the game is complete-->
+
+
+            <VerticalStackLayout HorizontalOptions="Center">
+
+                <HorizontalStackLayout Spacing="25" HorizontalOptions="Center">
+                    <Button x:Name="ClearListBtn" Text="Clear Leaderboard" Clicked="ClearLeaderboard"
+                        MinimumWidthRequest="500" HorizontalOptions="Center" BackgroundColor="DarkRed" IsVisible="False"/>
+                </HorizontalStackLayout>
+
+            </VerticalStackLayout>
+
+
+            <!-- Leaderboard List, which will be hidden until the game is complete-->
             <VerticalStackLayout x:Name="LeaderboardList" HorizontalOptions="Center" IsVisible="False">
-            <HorizontalStackLayout Spacing="50" HorizontalOptions="Center">
+                <Label Text="Leaderboard" FontSize="24" HorizontalOptions="Center" Margin="0,20"/>
+                <HorizontalStackLayout Spacing="50" HorizontalOptions="Center">
                 <Border Stroke="DarkRed" HeightRequest="44" WidthRequest="500" StrokeThickness="4"
                             HorizontalOptions="Center" VerticalOptions="Center">
                     <Label Text="Name:" Style="{StaticResource SubHeadline}"
@@ -77,18 +88,18 @@
         </VerticalStackLayout>
 
 
-            <HorizontalStackLayout x:Name="LeaderboardList2" Spacing="50" HorizontalOptions="Center" IsVisible="False">
+            <HorizontalStackLayout x:Name="LeaderboardList2" Spacing="50" HorizontalOptions="Center" IsVisible="False" >
             <Border Stroke="DarkRed" StrokeThickness="4" MinimumWidthRequest="500" MinimumHeightRequest="200" 
-                        HorizontalOptions="Center">
+                        HorizontalOptions="Center" Padding="10" >
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="10" />
                 </Border.StrokeShape>
-                <ListView ItemsSource="{Binding MyItems}">
+                    <ListView ItemsSource="{Binding MyItems}" HorizontalOptions="CenterAndExpand">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <HorizontalStackLayout>
-                                    <Label Text="{Binding Items}" VerticalOptions="Center" />
+                                <HorizontalStackLayout >
+                                        <Label Text="{Binding Items}" VerticalOptions="Center" FontSize="24"/>
                                     
                                 </HorizontalStackLayout>
                             </ViewCell>
@@ -102,12 +113,12 @@
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="10" />
                 </Border.StrokeShape>
-                <ListView ItemsSource="{Binding MyItems2}">
+                    <ListView ItemsSource="{Binding MyItems2}" HorizontalOptions="CenterAndExpand">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
                                 <HorizontalStackLayout>
-                                    <Label Text="{Binding Items}" VerticalOptions="Center" />
+                                        <Label Text="{Binding Items}" VerticalOptions="Center" FontSize="24"/>
                                     
                                 </HorizontalStackLayout>
                             </ViewCell>

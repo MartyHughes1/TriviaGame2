@@ -13,8 +13,7 @@
                 Clicked="OnSettingsButtonClicked"
                 HorizontalOptions="Center"/>
 
-        <!-- Leaderboard Section -->
-        <Label Text="Leaderboard" FontSize="24" HorizontalOptions="Center" Margin="0,20"/>
+
 
 
     </StackLayout>

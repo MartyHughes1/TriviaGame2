@@ -3,7 +3,7 @@ using System.Data.Common;
 using System.Collections.ObjectModel;
 using System.Text.Json;
 using System.Diagnostics;
-using System.Net; 
+using System.Net;
 
 using System.Net;
 using System.Text.Json;
@@ -22,6 +22,13 @@ namespace TriviaGame2
         private string category;
         private int questionsPerPlayer;
 
+
+        public ObservableCollection<MyItem> MyItems { get; set; } = new ObservableCollection<MyItem>(); // To do list
+        public ObservableCollection<MyItem> MyItems2 { get; set; } = new ObservableCollection<MyItem>(); // To do list
+        public ObservableCollection<MyItem> MyItemsSaved { get; set; } // Save items for when program is relaunched
+        public ObservableCollection<MyItem> MyItemsSaved2 { get; set; } // Save items for when program is relaunched
+
+
         // Updated constructor to accept player names
         public QuizPage(int numberOfPlayers, string category, int questionsPerPlayer, List<string> playerNames)
         {
@@ -30,6 +37,7 @@ namespace TriviaGame2
             this.category = category;
             this.questionsPerPlayer = questionsPerPlayer;
             this.playerNames = playerNames;
+            BindingContext = this;
 
             // Initialize player scores (set all to 0 initially)
             playerScores = Enumerable.Repeat(0, numberOfPlayers).ToList();
@@ -41,7 +49,28 @@ namespace TriviaGame2
             int totalQuestions = numberOfPlayers * questionsPerPlayer;
 
             FetchTriviaQuestions(totalQuestions);
+
+            // Load saved player names from preferences when the app starts
+            List<MyItem> loadedNames = LoadNamesFromPreferences();
+            MyItemsSaved = new ObservableCollection<MyItem>(loadedNames);
+
+            // Load saved player scores from preferences when the app starts
+            List<MyItem> loadedScores = LoadScoresFromPreferences();
+            MyItemsSaved2 = new ObservableCollection<MyItem>(loadedScores);
+
+            // Initialize the lists based on the loaded player names
+            foreach (var item in MyItemsSaved)
+            {
+                MyItems.Add(item);
+            }
+
+            // Initialize the lists based on the loaded player scores
+            foreach (var item in MyItemsSaved2)
+            {
+                MyItems2.Add(item);
+            }
         }
+
 
         private async void FetchTriviaQuestions(int totalQuestions)
         {
@@ -103,6 +132,7 @@ namespace TriviaGame2
             return WebUtility.HtmlDecode(html);
         }
 
+        // When quiz is finished, save both player names and scores
         private async void DisplayQuestion()
         {
             if (currentQuestionIndex < triviaQuestions.Count)
@@ -158,12 +188,36 @@ namespace TriviaGame2
                 SubmitButton.IsVisible = false;
                 PlayerScoresLabel.IsVisible = false;
 
-                // Show the Play Again button and image
+                // Show these after quiz
                 Trivia_image.IsVisible = true;
                 PlayAgainButton.IsVisible = true;
                 LeaderboardList.IsVisible = true;
                 LeaderboardList2.IsVisible = true;
+                ClearListBtn.IsVisible = true;
 
+                // To add player names to list
+                for (int i = 0; i < playerScores.Count; i++)
+                {
+                    var myItem = new MyItem
+                    {
+                        Items = $"{playerNames[i]}"
+                    };
+                    MyItems.Add(myItem);
+                }
+
+                // To add player scores to list
+                for (int i = 0; i < playerScores.Count; i++)
+                {
+                    var myItem = new MyItem
+                    {
+                        Items = $"{playerScores[i]}"
+                    };
+                    MyItems2.Add(myItem);
+                }
+
+                // Save tasks after adding a new one (include both MyItems and MyItems2)
+                SaveNamesToPreferences(MyItems.ToList());
+                SaveScoresToPreferences(MyItems2.ToList());
             }
         }
 
@@ -184,6 +238,7 @@ namespace TriviaGame2
             for (int i = 0; i < playerScores.Count; i++)
             {
                 scoresString += $"{playerNames[i]}: {playerScores[i]}, ";
+
             }
 
             // Remove the last comma and space
@@ -235,11 +290,12 @@ namespace TriviaGame2
             // Navigate back to the mainpage to restart quiz
             await Navigation.PopToRootAsync();
 
-            // Hide the "Play Again" button and image
+            // Hide these after quiz
             Trivia_image.IsVisible = false;
             PlayAgainButton.IsVisible = false;
             LeaderboardList.IsVisible = false;
             LeaderboardList2.IsVisible = false;
+            ClearListBtn.IsVisible = false;
 
 
             // Show the rest of the UI elements again
@@ -259,5 +315,67 @@ namespace TriviaGame2
             // Restart the quiz
             DisplayQuestion();
         }
+
+        //For list of leaderboard
+        public class MyItem
+        {
+            public string Items { get; set; }
+        }
+
+
+        // Method to save player names to preferences
+        private void SaveNamesToPreferences(List<MyItem> NamesPlayer)
+        {
+            string json = JsonSerializer.Serialize(NamesPlayer);
+            Preferences.Set("PlayerNames", json); // Save player names separately
+        }
+
+        // Method to load player names from preferences
+        private List<MyItem> LoadNamesFromPreferences()
+        {
+            string json = Preferences.Get("PlayerNames", "");
+            if (!string.IsNullOrEmpty(json))
+            {
+                return JsonSerializer.Deserialize<List<MyItem>>(json);
+            }
+            return new List<MyItem>(); // Return empty list if no names exist
+        }
+
+        // Method to save player scores to preferences
+        private void SaveScoresToPreferences(List<MyItem> Playerscores)
+        {
+            string json = JsonSerializer.Serialize(Playerscores);
+            Preferences.Set("PlayerScores", json); // Save player scores separately
+        }
+
+        // Method to load player scores from preferences
+        private List<MyItem> LoadScoresFromPreferences()
+        {
+            string json = Preferences.Get("PlayerScores", "");
+            if (!string.IsNullOrEmpty(json))
+            {
+                return JsonSerializer.Deserialize<List<MyItem>>(json);
+            }
+            return new List<MyItem>(); // Return empty list if no scores exist
+        }
+
+
+        private void ClearLeaderboard(object sender, EventArgs e)
+        {
+            // Clear the leaderboard
+            MyItems.Clear();
+            MyItems2.Clear();
+
+            // Save the updated lists (MyItems and MyItems2) to preferences
+            SaveNamesToPreferences(MyItems.ToList());
+            SaveScoresToPreferences(MyItems2.ToList());
+
+        }
+
+
+
+
+
+
     }
 }
