@@ -47,20 +47,25 @@ namespace TriviaGame2
 
             // Get the player names from the Entry fields
             List<string> playerNames = new List<string>();
+            bool allNamesEntered = true; // Flag to check if all names are entered
             foreach (var child in PlayerNameStackLayout.Children)
             {
-                if (child is Entry entry && !string.IsNullOrEmpty(entry.Text))
+                if (child is Entry entry)
                 {
-                    playerNames.Add(entry.Text);
-                }
-                else
-                {
-                    playerNames.Add($"Player {playerNames.Count + 1}"); // Default name if empty
+                    if (string.IsNullOrEmpty(entry.Text))
+                    {
+                        allNamesEntered = false; // A player name is missing
+                        playerNames.Add($"Player {playerNames.Count + 1}"); // Default name if empty
+                    }
+                    else
+                    {
+                        playerNames.Add(entry.Text);
+                    }
                 }
             }
 
-            // Ensure the number of player names matches the selected number of players
-            if (playerNames.Count != numberOfPlayers)
+            // Ensure the number of player names matches the selected number of players and all names are entered
+            if (playerNames.Count != numberOfPlayers || !allNamesEntered)
             {
                 await DisplayAlert("Missing Player Names", "Please enter names for all players.", "OK");
                 return;

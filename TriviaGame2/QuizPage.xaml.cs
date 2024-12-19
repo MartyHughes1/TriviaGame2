@@ -23,8 +23,8 @@ namespace TriviaGame2
         private int questionsPerPlayer;
 
 
-        public ObservableCollection<MyItem> MyItems { get; set; } = new ObservableCollection<MyItem>(); // To do list
-        public ObservableCollection<MyItem> MyItems2 { get; set; } = new ObservableCollection<MyItem>(); // To do list
+        public ObservableCollection<MyItem> MyItems { get; set; } = new ObservableCollection<MyItem>(); // Player name list
+        public ObservableCollection<MyItem> MyItems2 { get; set; } = new ObservableCollection<MyItem>(); // Player score list
         public ObservableCollection<MyItem> MyItemsSaved { get; set; } // Save items for when program is relaunched
         public ObservableCollection<MyItem> MyItemsSaved2 { get; set; } // Save items for when program is relaunched
 
