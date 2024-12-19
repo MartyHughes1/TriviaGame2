@@ -297,7 +297,9 @@ namespace TriviaGame2
             var currentQuestion = triviaQuestions[currentQuestionIndex];
             if (selectedAnswer == currentQuestion.correct_answer)
             {
-                playerScores[currentPlayerIndex]++;
+                // Get points based on the difficulty level
+                int points = GetPointsForDifficulty(difficulty);
+                playerScores[currentPlayerIndex] += points; // Add points to the current player's score
             }
 
             // Update the scores label after the answer is submitted
@@ -410,8 +412,21 @@ namespace TriviaGame2
             public int Score { get; set; }
         }
 
-
-
+        //points for difficulty chosen
+        private int GetPointsForDifficulty(string difficulty)
+        {
+            switch (difficulty.ToLower())
+            {
+                case "easy":
+                    return 1;
+                case "medium":
+                    return 2;
+                case "hard":
+                    return 3;
+                default:
+                    return 0; 
+            }
+        }
 
 
 
