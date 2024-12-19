@@ -4,9 +4,8 @@ using System.Collections.ObjectModel;
 using System.Text.Json;
 using System.Diagnostics;
 using System.Net;
+using Microsoft.Maui.Graphics;
 
-using System.Net;
-using System.Text.Json;
 
 namespace TriviaGame2
 {
@@ -95,7 +94,8 @@ namespace TriviaGame2
             Answer4.IsVisible = true;
             SubmitButton.IsVisible = true;
             PlayerScoresLabel.IsVisible = true;
-            TimerLabel.IsVisible = true;
+            TimerProgressBar.IsVisible = true;
+            TimerBorder.IsVisible = true;
 
             // Calculate total questions needed (number of players * questions per player)
             int totalQuestions = numberOfPlayers * questionsPerPlayer;
@@ -228,7 +228,8 @@ namespace TriviaGame2
                 Answer4.IsVisible = false;
                 SubmitButton.IsVisible = false;
                 PlayerScoresLabel.IsVisible = false;
-                TimerLabel.IsVisible = false;   
+                TimerBorder.IsVisible = false;
+                TimerProgressBar.IsVisible = false;
 
                 // Show these after quiz
                 Trivia_image.IsVisible = true;
@@ -352,6 +353,7 @@ namespace TriviaGame2
             Answer4.IsVisible = true;
             SubmitButton.IsVisible = true;
             PlayerScoresLabel.IsVisible = true;
+            TimerProgressBar.IsVisible = true;
 
             // Update the scores label to show all players' scores as 0
             UpdatePlayerScoresLabel();
@@ -446,29 +448,58 @@ namespace TriviaGame2
 
         private async Task StartAnswerTimer(CancellationToken cancellationToken)
         {
-            int timeRemaining = AnswerTimeLimit; // Set the starting time for the timer (15 seconds)
+            int timeRemaining = AnswerTimeLimit; // Starting time (15 seconds)
+            double progress = 1; // Start progress at full (1)
 
-            // Update the timer label initially
+            //Colours for changing progress bar and text
+            Color Orange = new Color(1f, 0.647f, 0f);
+            Color Black = new Color(0f, 0f, 0f);
+            Color Green = new Color(0f, 1f, 0f);
+
+            // Set initial values for the timer display
             TimerLabel.Text = $"Time: {timeRemaining}";
+            TimerProgressBar.Progress = progress;
 
             try
             {
-                // Loop and update the timer every second
+                // Loop and update every second
                 while (timeRemaining > 0 && !cancellationToken.IsCancellationRequested)
                 {
                     // Wait for 1 second
                     await Task.Delay(1000);
 
-                    // Decrease the time remaining by 1
+                    // Decrease the time remaining by 1 second
                     timeRemaining--;
+                    progress = (double)timeRemaining / AnswerTimeLimit; // Calculate the progress
 
-                    // Update the timer label with the new time remaining
+                    // Update the progress bar
+                    TimerProgressBar.Progress = progress;
+
+                    // Update the timer label
                     TimerLabel.Text = $"Time: {timeRemaining}";
-                }
+                    // Change the color when time is low (5 seconds or less)
+                    if (timeRemaining <= 5)
+                    {
+                        TimerProgressBar.ProgressColor = Orange;  // Change progress bar color to orange
+                        TimerLabel.TextColor = Orange;   // Change timer label text color to orange
+                    }
+
+                    else 
+                    {
+                        TimerProgressBar.ProgressColor = Green;  // Change progress bar color to red
+                        TimerLabel.TextColor = Black;
+                    }
+                    }
+
+
+
+
 
                 // If time runs out, show an alert and move to the next question
                 if (timeRemaining == 0)
                 {
+                    TimerProgressBar.ProgressColor = Green;  // Change progress bar color to red
+                    TimerLabel.TextColor = Black;
                     await DisplayAlert("Time's Up!", "You didn't answer in time. Moving to the next question.", "OK");
                     currentQuestionIndex++;
                     currentPlayerIndex = (currentPlayerIndex + 1) % numberOfPlayers;
@@ -480,6 +511,7 @@ namespace TriviaGame2
                 // Timer was canceled, do nothing
             }
         }
+
 
 
 
