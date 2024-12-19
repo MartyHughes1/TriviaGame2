@@ -6,7 +6,22 @@
     <ScrollView>
     <StackLayout Padding="20" Spacing="15">
 
-        <!-- Display current question number -->
+            <Border x:Name="TimerLabel" IsVisible="False" Stroke="Red" HorizontalOptions="CenterAndExpand" WidthRequest="150">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10" />
+                </Border.StrokeShape>
+            <!-- Timer Label -->
+            <Label 
+                   Text="Time Left: 15"
+                   FontSize="20"
+                   HorizontalTextAlignment="Center"
+                   VerticalTextAlignment="Center" 
+                   
+                   BackgroundColor="Red"/>
+            </Border>
+
+
+            <!-- Display current question number -->
         <Label x:Name="QuestionNumberLabel" 
                Text="Question 1"
                FontSize="20"

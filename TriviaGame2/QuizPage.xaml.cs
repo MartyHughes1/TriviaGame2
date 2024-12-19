@@ -22,6 +22,8 @@ namespace TriviaGame2
         private string category;
         private int questionsPerPlayer;
         public string difficulty;
+        private CancellationTokenSource _cancellationTokenSource;// cancels the timer when user answers question
+        private const int AnswerTimeLimit = 15; // 15 seconds timer
 
 
         public ObservableCollection<MyItem> MyItems { get; set; } = new ObservableCollection<MyItem>(); // Player name list
@@ -93,6 +95,7 @@ namespace TriviaGame2
             Answer4.IsVisible = true;
             SubmitButton.IsVisible = true;
             PlayerScoresLabel.IsVisible = true;
+            TimerLabel.IsVisible = true;
 
             // Calculate total questions needed (number of players * questions per player)
             int totalQuestions = numberOfPlayers * questionsPerPlayer;
@@ -168,6 +171,10 @@ namespace TriviaGame2
         {
             if (currentQuestionIndex < triviaQuestions.Count)
             {
+                // Cancel any existing timer
+                _cancellationTokenSource?.Cancel();
+                _cancellationTokenSource = new CancellationTokenSource();
+
                 var currentQuestion = triviaQuestions[currentQuestionIndex];
 
                 // Update the Question Number Label
@@ -201,6 +208,9 @@ namespace TriviaGame2
                     Answer3.IsVisible = true;
                     Answer4.IsVisible = true;
                 }
+
+                // Start the timer
+                await StartAnswerTimer(_cancellationTokenSource.Token);
             }
             else
             {
@@ -218,6 +228,7 @@ namespace TriviaGame2
                 Answer4.IsVisible = false;
                 SubmitButton.IsVisible = false;
                 PlayerScoresLabel.IsVisible = false;
+                TimerLabel.IsVisible = false;   
 
                 // Show these after quiz
                 Trivia_image.IsVisible = true;
@@ -277,6 +288,11 @@ namespace TriviaGame2
 
         private async void OnSubmitAnswerClicked(object sender, EventArgs e)
         {
+
+            // Cancel the timer when an answer is submitted
+            _cancellationTokenSource?.Cancel();
+
+
             string selectedAnswer = null;
 
             if (Answer1.IsChecked)
@@ -425,6 +441,43 @@ namespace TriviaGame2
                     return 3;
                 default:
                     return 0; 
+            }
+        }
+
+        private async Task StartAnswerTimer(CancellationToken cancellationToken)
+        {
+            int timeRemaining = AnswerTimeLimit; // Set the starting time for the timer (15 seconds)
+
+            // Update the timer label initially
+            TimerLabel.Text = $"Time: {timeRemaining}";
+
+            try
+            {
+                // Loop and update the timer every second
+                while (timeRemaining > 0 && !cancellationToken.IsCancellationRequested)
+                {
+                    // Wait for 1 second
+                    await Task.Delay(1000);
+
+                    // Decrease the time remaining by 1
+                    timeRemaining--;
+
+                    // Update the timer label with the new time remaining
+                    TimerLabel.Text = $"Time: {timeRemaining}";
+                }
+
+                // If time runs out, show an alert and move to the next question
+                if (timeRemaining == 0)
+                {
+                    await DisplayAlert("Time's Up!", "You didn't answer in time. Moving to the next question.", "OK");
+                    currentQuestionIndex++;
+                    currentPlayerIndex = (currentPlayerIndex + 1) % numberOfPlayers;
+                    DisplayQuestion();
+                }
+            }
+            catch (TaskCanceledException)
+            {
+                // Timer was canceled, do nothing
             }
         }
 
