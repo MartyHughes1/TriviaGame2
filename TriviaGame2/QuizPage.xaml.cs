@@ -21,6 +21,7 @@ namespace TriviaGame2
         private int numberOfPlayers;
         private string category;
         private int questionsPerPlayer;
+        public string difficulty;
 
 
         public ObservableCollection<MyItem> MyItems { get; set; } = new ObservableCollection<MyItem>(); // Player name list
@@ -30,13 +31,14 @@ namespace TriviaGame2
 
 
         // Updated constructor to accept player names
-        public QuizPage(int numberOfPlayers, string category, int questionsPerPlayer, List<string> playerNames)
+        public QuizPage(int numberOfPlayers, string category, int questionsPerPlayer, string difficulty, List<string> playerNames)
         {
             InitializeComponent();
             this.numberOfPlayers = numberOfPlayers;
             this.category = category;
             this.questionsPerPlayer = questionsPerPlayer;
             this.playerNames = playerNames;
+            this.difficulty = difficulty;
             BindingContext = this;
 
             // Initialize player scores (set all to 0 initially)
@@ -68,6 +70,7 @@ namespace TriviaGame2
             {
                 MyItems2.Add(item);
             }
+
         }
 
         private async void OnStartClicked(object sender, EventArgs e)
@@ -91,19 +94,21 @@ namespace TriviaGame2
             SubmitButton.IsVisible = true;
             PlayerScoresLabel.IsVisible = true;
 
-
             // Calculate total questions needed (number of players * questions per player)
             int totalQuestions = numberOfPlayers * questionsPerPlayer;
-            FetchTriviaQuestions(totalQuestions);
+
+            // Fetch trivia questions with the selected difficulty
+            FetchTriviaQuestions(totalQuestions, difficulty);
+
         }
 
 
-        private async void FetchTriviaQuestions(int totalQuestions)
+        private async void FetchTriviaQuestions(int totalQuestions, string difficulty)
         {
             try
             {
-                // Construct the API URL with the selected category and total number of questions
-                string apiUrl = string.Format(ApiUrl, totalQuestions, GetCategoryId(category));
+                // Construct the API URL with the selected category, difficulty, and total number of questions
+                string apiUrl = string.Format(ApiUrl + "&difficulty={2}", totalQuestions, GetCategoryId(category), difficulty.ToLower());
 
                 using var client = new HttpClient();
                 var response = await client.GetStringAsync(apiUrl);

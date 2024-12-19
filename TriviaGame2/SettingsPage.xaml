@@ -60,7 +60,20 @@
             </Picker.Items>
         </Picker>
 
-        <!-- Go to Quiz button -->
+            <!-- Picker to choose the trivia difficulty -->
+            <Picker x:Name="DifficultyPicker"
+                    Title="Select Difficulty"
+                    SelectedIndex="0"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Center">
+                <Picker.Items>
+                    <x:String>Easy</x:String>
+                    <x:String>Medium</x:String>
+                    <x:String>Hard</x:String>
+                </Picker.Items>
+            </Picker>
+
+            <!-- Go to Quiz button -->
         <Button x:Name="StartQuizButton" 
                 Text="Start Quiz"
                 Clicked="OnStartQuizButtonClicked"

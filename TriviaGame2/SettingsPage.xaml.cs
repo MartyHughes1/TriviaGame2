@@ -35,10 +35,10 @@ namespace TriviaGame2
         private async void OnStartQuizButtonClicked(object sender, EventArgs e)
         {
             // Validate that the user has selected valid options
-            if (PlayerPicker.SelectedIndex == -1 || CategoryPicker.SelectedIndex == -1 || QuestionsPicker.SelectedIndex == -1)
+            if (PlayerPicker.SelectedIndex == -1 || CategoryPicker.SelectedIndex == -1 || QuestionsPicker.SelectedIndex == -1 || DifficultyPicker.SelectedIndex == -1)
             {
                 // Show an alert if any picker has not been selected
-                await DisplayAlert("Missing Selection", "Please select a number of players, a category, and the number of questions per player.", "OK");
+                await DisplayAlert("Missing Selection", "Please select a number of players, a category, the number of questions per player, and a difficulty level.", "OK");
                 return;
             }
 
@@ -77,8 +77,11 @@ namespace TriviaGame2
             // Get the number of questions per player selected by the user
             int questionsPerPlayer = int.Parse(QuestionsPicker.SelectedItem.ToString());
 
-            // Navigate to the QuizPage and pass the player names, number of players, category, and questions per player
-            await Navigation.PushAsync(new QuizPage(numberOfPlayers, category, questionsPerPlayer, playerNames));
+            // Get the difficulty level selected by the user
+            string difficulty = DifficultyPicker.SelectedItem.ToString();
+
+            // Navigate to the QuizPage and pass the player names, number of players, category, questions per player, and difficulty
+            await Navigation.PushAsync(new QuizPage(numberOfPlayers, category, questionsPerPlayer, difficulty, playerNames));
         }
     }
 }
